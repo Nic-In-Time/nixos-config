@@ -34,6 +34,14 @@
               useGlobalPkgs = true;
               useUserPackages = true;
 
+	      extraSpecialArgs = { inherit inputs; };
+
+	      sharedModules = [
+	      inputs.nixvim.homeManagerModules.nixvim
+	      ];
+
+	      users.nic = import	      ./home.nix; 
+
             };
           }
           {

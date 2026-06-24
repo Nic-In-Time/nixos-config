@@ -2,15 +2,18 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
-
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.limine = {
@@ -58,19 +61,19 @@
   #   useXkbConfig = true; # use xkb.options in tty.
   # };
   hardware.graphics = {
-  enable = true;
-  enable32Bit = true;
-};
+    enable = true;
+    enable32Bit = true;
+  };
 
-services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-hardware.nvidia = {
-  modesetting.enable = true;
-  powerManagement.enable = false;
-  open = false; # Set to true if using modern Turing+ open-source kernel modules
-  nvidiaSettings = true;
-  package = config.boot.kernelPackages.nvidiaPackages.stable;
-};
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    open = false; # Set to true if using modern Turing+ open-source kernel modules
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
@@ -82,7 +85,7 @@ hardware.nvidia = {
 
   programs.steam.enable = true;
 
-
+  programs.nix-ld.enable = true;
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -125,52 +128,60 @@ hardware.nvidia = {
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
   # ];
-environment.systemPackages = with pkgs; [
-   neovim
-   git
-   wget
-   kitty
-   quickshell
-   ripgrep
-   cargo
-   firefox
-   discord
-   ripgrep
-   fd
-   nodejs
-   go
-   hyfetch
-   fastfetch
-   godot
-   hyprpaper
-   hyprshot
-   discord
-   pwvucontrol
-   spotify
-   gcc
-   (olympus.override { celesteWrapper = "steam-run"; })
-   fish
-   rustup
-   cloudflared
-];
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+    kitty
+    quickshell
+    ripgrep
+    cargo
+    firefox
+    discord
+    ripgrep
+    fd
+    nodejs
+    go
+    hyfetch
+    fastfetch
+    godot
+    hyprpaper
+    hyprshot
+    discord
+    pwvucontrol
+    spotify
+    gcc
+    (olympus.override { celesteWrapper = "steam-run"; })
+    fish
+    rustup
+    cloudflared
+    playerctl
+    kdePackages.qtmultimedia
+    python3
+  ];
+  #onnly using this because nvim transparent doesnt work
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "steam"
+      "steam-unwrapped"
+      "discord"
+      "spotify"
+      "nvidia-x11"
+      "nvidia-settings"
+      "nvidia-kernel-modules"
+      "transparent.nvim"
+      "vimplugin-transparent.nvim"
+    ];
 
-nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-  "steam"
-  "steam-unwrapped"
-  "discord"
-  "spotify"
-  "nvidia-x11"
-  "nvidia-settings"
-  "nvidia-kernel-modules"
-];
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   fonts.packages = builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
 
-
-
-    # Some programs need SUID wrappers, can be configured further or are
+  # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.gnupg.agent = {
@@ -213,4 +224,3 @@ nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
   system.stateVersion = "26.05"; # Did you read the comment?
 
 }
-

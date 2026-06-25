@@ -1,7 +1,7 @@
 {
   description = "Hyprland yay";
   inputs = {
-    aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-26.05";
+    aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     aagl.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
@@ -34,13 +34,13 @@
               useGlobalPkgs = true;
               useUserPackages = true;
 
-	      extraSpecialArgs = { inherit inputs; };
+              extraSpecialArgs = { inherit inputs; };
 
-	      sharedModules = [
-	      inputs.nixvim.homeManagerModules.nixvim
-	      ];
+              sharedModules = [
+                inputs.nixvim.homeModules.nixvim
+              ];
 
-	      users.nic = import	      ./home.nix; 
+              users.nic = import ./home.nix;
 
             };
           }

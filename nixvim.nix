@@ -7,11 +7,18 @@
 {
   programs.nixvim = {
     enable = true;
+    globals.mapleader = " ";
     imports = [
       ./lsp.nix
     ];
     colorschemes.onedark.enable = true;
-    plugins.telescope.enable = true;
+    plugins.telescope = {
+      enable = true;
+
+      keymaps = {
+        "<leader><leader>" = "find_files";
+      };
+    };
     plugins.conform-nvim = {
       enable = true;
       settings = {

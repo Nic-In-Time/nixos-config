@@ -13,6 +13,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./psql.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -134,7 +135,6 @@
     kitty
     quickshell
     ripgrep
-    cargo
     firefox
     discord
     ripgrep
@@ -157,6 +157,7 @@
     playerctl
     kdePackages.qtmultimedia
     python3
+    libnotify
   ];
   #onnly using this because nvim transparent doesnt work
   nixpkgs.config.allowUnfree = true;

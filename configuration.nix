@@ -66,11 +66,18 @@
     enable32Bit = true;
   };
 
+  hardware.opentabletdriver.enable = true;
+  hardware.opentabletdriver.daemon.enable = true;
+
+  hardware.uinput.enable = true;
+
+  boot.kernelModules = [ "uinput" ];
+
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     open = false; # Set to true if using modern Turing+ open-source kernel modules
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -158,6 +165,13 @@
     kdePackages.qtmultimedia
     python3
     libnotify
+    hmcl
+    krita
+    google-chrome
+    protonplus
+    wl-clipboard
+    wl-clip-persist
+    matugen
   ];
   #onnly using this because nvim transparent doesnt work
   nixpkgs.config.allowUnfree = true;

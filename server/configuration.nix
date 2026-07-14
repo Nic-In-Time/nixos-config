@@ -13,6 +13,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./git-server.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -76,7 +77,11 @@
   # };
   users.users.nyx = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "git"
+      #"gitreporeaders"
+    ];
   };
 
   # programs.firefox.enable = true;

@@ -62,7 +62,7 @@ in
   # Make gitHome owned by group `readGroup`, with the setgid bit so any
   # repo git creates underneath inherits that group automatically.
   systemd.tmpfiles.rules = [
-    "d ${gitHome} 2750 ${gitUser} ${readGroup} -"
+    "z ${gitHome} 2750 ${gitUser} ${readGroup} -"
     "d ${gitHome}/git-shell-commands 0750 ${gitUser} ${gitUser} -"
     # Symlink our wrapper into git-shell's custom-commands directory
     "L+ ${gitHome}/git-shell-commands/git-shell-commander - - - - ${gitShellCommand}"

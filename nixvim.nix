@@ -33,7 +33,9 @@
     };
     plugins.treesitter.enable = true;
     plugins.gitsigns.enable = true;
-    plugins.autoclose.enable = true;
+    plugins.autoclose = {
+      enable = true;
+    };
     plugins.bufferline.enable = true;
     plugins.lualine.enable = true;
     plugins.trouble.enable = true;

@@ -165,13 +165,16 @@
     kdePackages.qtmultimedia
     python3
     libnotify
-    hmcl
+    hmcl # Miencraft
     krita
     google-chrome
     protonplus
     wl-clipboard
     wl-clip-persist
     matugen
+    gdlauncher-carbon
+    prismlauncher
+    obs-studio
   ];
   #onnly using this because nvim transparent doesnt work
   nixpkgs.config.allowUnfree = true;

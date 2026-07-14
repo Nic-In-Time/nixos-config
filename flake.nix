@@ -1,5 +1,5 @@
 {
-  description = "Hyprland yay";
+  description = "Flake incorporating all systems";
   inputs = {
     aagl.url = "github:ezKEa/aagl-gtk-on-nix";
     aagl.inputs.nixpkgs.follows = "nixpkgs";
@@ -12,6 +12,8 @@
       url = "github:nix-community/nixvim";
     };
     qylock.url = "github:Darkkal44/qylock";
+    sops-nix.url = "github:Mic92/sops-nix";
+
   };
   outputs =
     {
@@ -24,10 +26,11 @@
       ...
     }@inputs:
     {
+      # Configuration for laptop
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./configuration.nix
+          ./laptop/configuration.nix
           home-manager.nixosModules.home-manager
           {
             home-manager = {
@@ -40,7 +43,7 @@
                 inputs.nixvim.homeModules.nixvim
               ];
 
-              users.nic = import ./home.nix;
+              users.nic = import ./laptop/home.nix;
 
             };
           }
@@ -83,5 +86,27 @@
           })
         ];
       };
+      # first server configuration
+      nixosConfigurations.nyxos-server = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./server/configuration.nix
+          ./server/cloudflare_tunnel.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              sharedModules = [
+                inputs.nixvim.homeModules.nixvim
+              ];
+
+              users.nyx = import ./server/home.nix;
+            };
+          }
+        ];
+      };
+
     };
 }

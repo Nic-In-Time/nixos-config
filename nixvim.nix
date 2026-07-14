@@ -9,7 +9,7 @@
     enable = true;
     globals.mapleader = " ";
     imports = [
-      ./lsp.nix
+      ./nixvim/lsp.nix
       ./nixvim/globals.nix
     ];
     waylandSupport = true;

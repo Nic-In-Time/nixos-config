@@ -1,0 +1,7 @@
+keys:
+  - &admin_nyx age1r6gfu495my5p9ufva7pf9fp8ma92emzwfhl4ux7z090chsjjyqcsxwppf8
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *admin_nyx

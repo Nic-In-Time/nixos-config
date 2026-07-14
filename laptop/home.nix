@@ -15,7 +15,7 @@
   ];
 
   imports = [
-    ./nixvim.nix
+    ./../nixvim.nix
   ];
 
   programs.git = {

@@ -53,6 +53,7 @@ in
     shell = "${pkgs.git}/bin/git-shell";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGgOwcuIVP2/67xR4ZsO4GYN0HQWBn7ZpZoVo8KM3yV6 nic@nixos"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNBKEcGNfMYrY9xKglUOQ4f6oSw+JNEDx1ABnQ/yNd7 u0a390@localhost"
     ];
   };
 

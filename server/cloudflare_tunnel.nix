@@ -30,6 +30,7 @@
         # ex: cloudflared tunnel route dns server1 ssh.nicintime.ca
         ingress = {
           "ssh.nicintime.ca" = "ssh://localhost:22";
+          "web.nicintime.ca" = "http://localhost:8080";
         };
         default = "http_status:404";
       };

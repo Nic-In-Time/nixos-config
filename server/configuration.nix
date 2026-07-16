@@ -26,6 +26,64 @@
 
   networking.hostName = "nyxos-server"; # Define your hostname.
 
+  # Website hosting
+  services.nginx = {
+    enable = true;
+    virtualHosts.localhost = {
+      addSSL = false;
+      forceSSL = false;
+      listen = [
+        {
+          addr = "127.0.0.1";
+          port = 8080;
+          ssl = false;
+        }
+      ];
+
+      locations."/" = {
+        root = "/var/www/website";
+      };
+      locations."= /custom.css" = {
+        alias = "/var/www/website/custom-cgit.css";
+        extraConfig = ''
+          # Prevents browser caching from hiding your edits during testing
+          add_header Cache-Control "no-cache, must-revalidate, max-age=0";
+        '';
+      };
+      locations."= /logo.png" = {
+        alias = "/var/www/website/logo.png";
+
+      };
+    };
+  };
+
+  services.cgit.whatever = {
+    enable = true;
+    scanPath = "/home/git";
+    gitHttpBackend.enable = false;
+    user = "git";
+    group = lib.mkForce "git";
+
+    nginx = {
+      location = "/cgit";
+      virtualHost = "localhost";
+    };
+    settings = {
+      css = "/custom-cgit.css";
+      logo = "/logo.png"; # to actually have a custom logo, add one to /var/www/website
+    };
+
+    extraConfig = ''
+      head-include=/var/www/website/head.html
+    '';
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+    8080
+  ];
+
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
 
@@ -80,6 +138,7 @@
     extraGroups = [
       "wheel"
       "git"
+      "nginx"
       #"gitreporeaders"
     ];
   };

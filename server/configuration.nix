@@ -30,8 +30,8 @@
   services.nginx = {
     enable = true;
     virtualHosts.localhost = {
-      addSSL = false;
-      forceSSL = false;
+      forceSSL = true;
+      enableACME = true;
       listen = [
         {
           addr = "127.0.0.1";
@@ -55,6 +55,11 @@
 
       };
     };
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "nyx@nicintime.ca";
   };
 
   services.cgit.whatever = {

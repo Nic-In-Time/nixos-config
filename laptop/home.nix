@@ -12,6 +12,7 @@
 
   home.packages = with pkgs; [
     nodejs
+    pkgs.devenv
   ];
 
   imports = [
@@ -33,6 +34,7 @@
     enable = true;
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake /home/nic/.config/nixos/";
+      update = "sudo nix flake update --flake /home/nic/.config/nixos/";
       server1 = "ssh testing@ssh1.nicintime.ca";
       server2 = "ssh testing@ssh2.nicintime.ca";
       hypr = "start-hyprland";

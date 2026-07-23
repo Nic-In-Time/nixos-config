@@ -27,18 +27,25 @@
   networking.hostName = "nyxos-server"; # Define your hostname.
 
   # Website hosting
+
+  users.users.nginx.extraGroups = [ "acme" ];
+
   services.nginx = {
     enable = true;
-    virtualHosts.localhost = {
-      forceSSL = true;
+    virtualHosts."nicintime.ca" = {
+      onlySSL = true;
       enableACME = true;
       listen = [
         {
           addr = "127.0.0.1";
           port = 8080;
-          ssl = false;
+          ssl = true;
         }
       ];
+
+      extraConfig = ''
+        port_in_redirect off;
+      '';
 
       locations."/" = {
         root = "/var/www/website";
@@ -71,7 +78,7 @@
 
     nginx = {
       location = "/cgit";
-      virtualHost = "localhost";
+      virtualHost = "nicintime.ca";
     };
     settings = {
       css = "/custom-cgit.css";
@@ -159,6 +166,7 @@
   environment.systemPackages = with pkgs; [
     vim
     cloudflared
+    tmux
   ];
   nix.settings.experimental-features = [
     "nix-command"

@@ -7,6 +7,9 @@
 {
   programs.nixvim = {
     enable = true;
+    extraPackages = with pkgs; [
+      qt6.qtdeclarative
+    ];
     globals.mapleader = " ";
     imports = [
       ./nixvim/lsp.nix
@@ -28,6 +31,9 @@
         format_on_save = {
           lsp_fallback = true;
           timeout_ms = 500;
+        };
+        formatters_by_ft = {
+          qml = [ "qmlformat" ];
         };
       };
     };

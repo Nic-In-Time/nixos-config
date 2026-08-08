@@ -175,6 +175,7 @@
     gdlauncher-carbon
     prismlauncher
     obs-studio
+    serie
   ];
   #onnly using this because nvim transparent doesnt work
   nixpkgs.config.allowUnfree = true;

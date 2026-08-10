@@ -16,53 +16,97 @@
       ./nixvim/globals.nix
     ];
     waylandSupport = true;
-
+    # colorscheme
     colorschemes.onedark.enable = true;
-    plugins.telescope = {
-      enable = true;
+    plugins = {
 
-      keymaps = {
-        "<leader><leader>" = "find_files";
-      };
-    };
-    plugins.conform-nvim = {
-      enable = true;
-      settings = {
-        format_on_save = {
-          lsp_fallback = true;
-          timeout_ms = 500;
-        };
-        formatters_by_ft = {
-          qml = [ "qmlformat" ];
+      # fuzzy file finder
+      telescope = {
+        enable = true;
+
+        keymaps = {
+          "<leader><leader>" = "find_files";
         };
       };
-    };
-    plugins.treesitter.enable = true;
-    plugins.gitsigns.enable = true;
-    plugins.autoclose = {
-      enable = true;
-    };
-    plugins.bufferline.enable = true;
-    plugins.lualine.enable = true;
-    plugins.trouble.enable = true;
+      # auto format
+      conform-nvim = {
+        enable = true;
+        settings = {
+          format_on_save = {
+            lsp_fallback = true;
+            timeout_ms = 500;
+          };
+          formatters_by_ft = {
+            qml = [ "qmlformat" ];
+          };
+        };
+      };
+      # treesitter does stuff
+      treesitter.enable = true;
+      # shows git changes
+      gitsigns.enable = true;
+      # autoclose brackets and tags
+      ts-autotag.enable = true;
+      # status bar and tab bar
+      bufferline.enable = true;
+      lualine.enable = true;
+      # errors
+      trouble.enable = true;
+      # autocomplete
+      blink-cmp = {
+        enable = true;
+        settings = {
+          keymap = {
+            "<Tab>" = [
+              "select_next"
+              "fallback"
+            ];
+            "<S-Tab>" = [
+              "select_prev"
+              "fallback"
+            ];
+            "<Enter>" = [
+              "accept"
+              "fallback"
+            ];
+            "<Up>" = [ "fallback" ];
+            "<Down>" = [ "fallback" ];
+          };
+        };
+      };
 
-    plugins.blink-cmp.enable = true;
+      highlight-colors.enable = true;
 
-    plugins.highlight-colors.enable = true;
-
-    plugins.transparent = {
-      enable = true;
-      settings = {
-        extra_groups = [
-          "BufferLineTabClose"
-          "BufferLineBufferSelected"
-          "BufferLineFill"
-          "BufferLineBackground"
-          "BufferLineSeparator"
-          "BufferLineIndicatorSelected"
-        ];
+      transparent = {
+        enable = true;
+        settings = {
+          extra_groups = [
+            "BufferLineTabClose"
+            "BufferLineBufferSelected"
+            "BufferLineFill"
+            "BufferLineBackground"
+            "BufferLineSeparator"
+            "BufferLineIndicatorSelected"
+          ];
+        };
       };
     };
+    extraPlugins = [
+      (pkgs.vimUtils.buildVimPlugin {
+        name = "ultimate-autopair";
+        src = pkgs.fetchFromGitHub {
+          owner = "altermo";
+          repo = "ultimate-autopair.nvim";
+          rev = "6b58234de921437836efe27714b2026ed2ee235a";
+          hash = "sha256-JEL6ansTFn4930gz6i7zUyvCaSxHJImz8hdwoQmX7qM=";
+        };
+      })
+    ];
+    extraConfigLua = ''
+      	require('ultimate-autopair').setup({
+
+      	})
+    '';
 
     diagnostic.settings = {
       virtual_lines = {

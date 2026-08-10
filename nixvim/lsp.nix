@@ -92,6 +92,7 @@
         installCargo = true;
         installRustc = true;
       };
+      qmlls.enable = true;
     };
   };
 }

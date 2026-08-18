@@ -28,9 +28,25 @@
 
   # Website hosting
 
-  users.users.nginx.extraGroups = [ "acme" ];
-
+  users.users.nginx.extraGroups = [
+    "acme"
+    "git"
+  ];
+  services.fcgiwrap.instances."git-http-backend" = {
+    socket = {
+      type = "unix";
+      address = "/run/fcgiwrap.sock";
+      user = "git";
+      group = "git";
+      mode = "0660";
+    };
+    process = {
+      user = "git";
+      group = "git";
+    };
+  };
   services.nginx = {
+
     enable = true;
     virtualHosts."nicintime.ca" = {
       onlySSL = true;
@@ -44,7 +60,9 @@
       ];
 
       extraConfig = ''
-        port_in_redirect off;
+                port_in_redirect off;
+        	expires -1;
+                add_header Cache-Control "no-cache, must-revalidate, max-age=0";
       '';
 
       locations."/" = {
@@ -61,6 +79,44 @@
         alias = "/var/www/website/logo.png";
 
       };
+    };
+    virtualHosts."clone.nicintime.ca" = {
+      onlySSL = true;
+      enableACME = true;
+      listen = [
+        {
+          addr = "127.0.0.1";
+          port = 8080;
+          ssl = true;
+        }
+      ];
+
+      extraConfig = ''
+        port_in_redirect off;
+      '';
+
+      locations."~ (/.*)" = {
+
+        # This is where the repositories live on the server
+        root = "/home/git";
+
+        # Setup FastCGI for Git HTTP Backend
+        extraConfig = ''
+          fastcgi_pass        unix:/run/fcgiwrap.sock;
+          include             ${pkgs.nginx}/conf/fastcgi_params;
+          # All parameters below will be forwarded to fcgiwrap which then starts
+          # the git http proces with the the params as environment variables except
+          # for SCRIPT_FILENAME. See "man git-http-server" for more information on them.
+          fastcgi_param       SCRIPT_FILENAME     ${pkgs.git}/bin/git-http-backend;
+          fastcgi_param       GIT_PROJECT_ROOT /home/git;
+          # CAREFULL! only include this option if you want all the repos in $root to
+          # to be read.
+          fastcgi_param       GIT_HTTP_EXPORT_ALL "";
+          # use the path from the regex in the location
+          fastcgi_param       PATH_INFO           $1;
+        '';
+      };
+
     };
   };
 
@@ -94,6 +150,7 @@
     80
     443
     8080
+    9418
   ];
 
   # Configure network connections interactively with nmcli or nmtui.

@@ -30,13 +30,21 @@
         # ex: cloudflared tunnel route dns server1 ssh.nicintime.ca
         ingress = {
           "ssh.nicintime.ca" = "ssh://localhost:22";
-          "web.nicintime.ca" = {
+          "nicintime.ca" = {
             originRequest = {
               noTLSVerify = true;
-              httpHostHeader = "web.nicintime.ca";
+              httpHostHeader = "nicintime.ca";
             };
             service = "https://127.0.0.1:8080";
           };
+          "clone.nicintime.ca" = {
+            originRequest = {
+              noTLSVerify = true;
+              httpHostHeader = "clone.nicintime.ca";
+            };
+            service = "https://127.0.0.1:8080";
+          };
+
         };
         default = "http_status:404";
       };

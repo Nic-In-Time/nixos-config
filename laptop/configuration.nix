@@ -110,6 +110,9 @@
     pulse.enable = true;
   };
 
+  # power management daemon
+  services.upower.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
@@ -176,6 +179,7 @@
     prismlauncher
     obs-studio
     serie
+    openfortivpn
   ];
   #onnly using this because nvim transparent doesnt work
   nixpkgs.config.allowUnfree = true;

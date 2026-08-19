@@ -1,0 +1,2 @@
+host = vpn.dawsoncollege.qc.ca
+port = 10443
